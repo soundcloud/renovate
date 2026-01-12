@@ -313,6 +313,17 @@ const options: Readonly<RenovateOptions>[] = [
     cli: false,
   },
   {
+    name: 'onboardingWelcomeMessage',
+    description:
+      'Change this value to override the default onboarding PR welcome message.',
+    type: 'string',
+    default:
+      'This is an onboarding PR to help you understand and configure settings before regular Pull Requests begin.',
+    globalOnly: true,
+    inheritConfigSupport: true,
+    cli: false,
+  },
+  {
     name: 'configMigration',
     description: 'Enable this to get config migration PRs when needed.',
     stage: 'repository',
