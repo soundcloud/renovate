@@ -393,7 +393,7 @@
       "re2"
     ],
     "overrides": {
-      "@yarnpkg/core@4.5.0>tar": "7.5.12",
+      "@yarnpkg/core@4.5.0>tar": "7.5.13",
       "esbuild": "0.27.4",
       "vite": "8.0.0-beta.13"
     }
