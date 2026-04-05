@@ -370,8 +370,8 @@ importers:
         specifier: 14.0.0
         version: 14.0.0(commander@14.0.3)
       '@containerbase/istanbul-reports-html':
-        specifier: 1.1.38
-        version: 1.1.38
+        specifier: 1.1.39
+        version: 1.1.39
       '@containerbase/semantic-release-pnpm':
         specifier: 1.3.28
         version: 1.3.28(semantic-release@25.0.3(typescript@5.9.3))
@@ -586,8 +586,8 @@ importers:
         specifier: 3.0.3
         version: 3.0.3
       tsdown:
-        specifier: 0.21.6
-        version: 0.21.6(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(typescript@5.9.3)
+        specifier: 0.21.7
+        version: 0.21.7(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(typescript@5.9.3)
       type-fest:
         specifier: 5.5.0
         version: 5.5.0
@@ -1015,8 +1015,8 @@ packages:
     peerDependencies:
       commander: ~14.0.0
 
-  '@containerbase/istanbul-reports-html@1.1.38':
-    resolution: {integrity: sha512-sJn8loCiTwNCYJs1pHaP97fxO9kOLcX1732j5n7QvCWI3pJDRScdnmK72F4Ytb5S3IqW3uEWdEeYAvhhB8lREQ==}
+  '@containerbase/istanbul-reports-html@1.1.39':
+    resolution: {integrity: sha512-LmQWnX12zu0wdyn5kIFQShhOxjbgP7jd84IbMVj3atKbAaOx3tySZzVb74cpua/tzWFHWE7hL+hfQfe2SuiCCg==}
     engines: {node: ^20.9.0 || ^22.11.0 || ^24.0.0, pnpm: ^10.0.0}
 
   '@containerbase/semantic-release-pnpm@1.3.28':
@@ -5943,14 +5943,14 @@ packages:
       typescript:
         optional: true
 
-  tsdown@0.21.6:
-    resolution: {integrity: sha512-YsgPuWczqxPkXiJwMPrv3eOiqx4KPhOdksqubVCDhS7lChK3RYlWsEGhZixc0+lqN3fmBYEnETaujEWDpMPZmA==}
+  tsdown@0.21.7:
+    resolution: {integrity: sha512-ukKIxKQzngkWvOYJAyptudclkm4VQqbjq+9HF5K5qDO8GJsYtMh8gIRwicbnZEnvFPr6mquFwYAVZ8JKt3rY2g==}
     engines: {node: '>=20.19.0'}
     hasBin: true
     peerDependencies:
       '@arethetypeswrong/core': ^0.18.1
-      '@tsdown/css': 0.21.6
-      '@tsdown/exe': 0.21.6
+      '@tsdown/css': 0.21.7
+      '@tsdown/exe': 0.21.7
       '@vitejs/devtools': '*'
       publint: ^0.3.0
       typescript: ^5.0.0 || ^6.0.0
@@ -7367,7 +7367,7 @@ snapshots:
     dependencies:
       commander: 14.0.3
 
-  '@containerbase/istanbul-reports-html@1.1.38':
+  '@containerbase/istanbul-reports-html@1.1.39':
     dependencies:
       istanbul-lib-report: 3.0.1
       istanbul-reports: 3.2.0
@@ -12645,7 +12645,7 @@ snapshots:
     optionalDependencies:
       typescript: 5.9.3
 
-  tsdown@0.21.6(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(typescript@5.9.3):
+  tsdown@0.21.7(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(typescript@5.9.3):
     dependencies:
       ansis: 4.2.0
       cac: 7.0.0
