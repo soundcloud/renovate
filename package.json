@@ -145,7 +145,7 @@
   "homepage": "https://renovatebot.com",
   "engines": {
     "node": "^24.11.0",
-    "pnpm": "^10.0.0"
+    "pnpm": "10.33.0"
   },
   "volta": {
     "node": "24.14.1",
@@ -375,7 +375,7 @@
       "re2"
     ],
     "overrides": {
-      "@aws-sdk/xml-builder@3.972.4>fast-xml-parser": "^5.3.6",
+      "@aws-sdk/xml-builder@3.972.4>fast-xml-parser": "5.5.12",
       "@yarnpkg/core@4.5.0>tar": "$tar",
       "esbuild": "$esbuild",
       "vite": "$vite"

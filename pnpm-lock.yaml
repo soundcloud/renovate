@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@aws-sdk/xml-builder@3.972.4>fast-xml-parser': ^5.3.6
+  '@aws-sdk/xml-builder@3.972.4>fast-xml-parser': 5.5.12
   '@yarnpkg/core@4.5.0>tar': 7.5.13
   esbuild: 0.28.0
   vite: 8.0.5
