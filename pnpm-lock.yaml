@@ -373,11 +373,11 @@ importers:
         specifier: 14.0.0
         version: 14.0.0(commander@14.0.3)
       '@containerbase/istanbul-reports-html':
-        specifier: 1.1.43
-        version: 1.1.43
+        specifier: 1.1.44
+        version: 1.1.44
       '@containerbase/semantic-release-pnpm':
-        specifier: 1.3.33
-        version: 1.3.33(semantic-release@25.0.3(typescript@6.0.2))
+        specifier: 1.3.34
+        version: 1.3.34(semantic-release@25.0.3(typescript@6.0.2))
       '@hyrious/marshal':
         specifier: 0.3.3
         version: 0.3.3
@@ -596,8 +596,8 @@ importers:
         version: 4.0.0(typescript@6.0.2)(vitest@4.1.4)
     optionalDependencies:
       better-sqlite3:
-        specifier: 12.8.0
-        version: 12.8.0
+        specifier: 12.9.0
+        version: 12.9.0
       openpgp:
         specifier: 6.3.0
         version: 6.3.0
@@ -997,12 +997,12 @@ packages:
     peerDependencies:
       commander: ~14.0.0
 
-  '@containerbase/istanbul-reports-html@1.1.43':
-    resolution: {integrity: sha512-7YJRMjGkTHSmWQiP7kQZr2AvbWI8mimig1qqy35/EVpvo6BCLtmw/QLk2BjTLel8MKTVlzLPa1lVoAfpDHHezQ==}
+  '@containerbase/istanbul-reports-html@1.1.44':
+    resolution: {integrity: sha512-B5euV16UxKVamywUIlCNLQxtRXQX0v9Hr4dFlDHchn61NR4TIecRwqgPsJn0e0oWieDRDvD93T0Bu7+SuObs4A==}
     engines: {node: ^20.9.0 || ^22.11.0 || ^24.0.0, pnpm: ^10.0.0}
 
-  '@containerbase/semantic-release-pnpm@1.3.33':
-    resolution: {integrity: sha512-FKlF05pZ2X+BNV7IoGzCiyEAbW40HGzg/X7oBd2lE298GbTBkyFZlAuNxhD0pN5NageTuIEbVlwL/0KwF0p8rQ==}
+  '@containerbase/semantic-release-pnpm@1.3.34':
+    resolution: {integrity: sha512-JOx43G92wX6a0BKSZRmsD8WkqmBPjNXTdzQqlRMlwv3Pd9JM2BcDoAEPtxTPiSRNmddzEriX4kr9KSRJ82L3UA==}
     engines: {node: ^22.11.0 || ^24}
     peerDependencies:
       semantic-release: ^24.0.0 || ^25.0.0
@@ -2698,8 +2698,8 @@ packages:
   before-after-hook@4.0.0:
     resolution: {integrity: sha512-q6tR3RPqIB1pMiTRMFcZwuG5T8vwp+vUvEG0vuI6B+Rikh5BfPp2fQ82c925FOs+b0lcFQ8CFrL+KbilfZFhOQ==}
 
-  better-sqlite3@12.8.0:
-    resolution: {integrity: sha512-RxD2Vd96sQDjQr20kdP+F+dK/1OUNiVOl200vKBZY8u0vTwysfolF6Hq+3ZK2+h8My9YvZhHsF+RSGZW2VYrPQ==}
+  better-sqlite3@12.9.0:
+    resolution: {integrity: sha512-wqUv4Gm3toFpHDQmaKD4QhZm3g1DjUBI0yzS4UBl6lElUmXFYdTQmmEDpAFa5o8FiFiymURypEnfVHzILKaxqQ==}
     engines: {node: 20.x || 22.x || 23.x || 24.x || 25.x}
 
   bignumber.js@9.3.1:
@@ -6925,12 +6925,12 @@ snapshots:
     dependencies:
       commander: 14.0.3
 
-  '@containerbase/istanbul-reports-html@1.1.43':
+  '@containerbase/istanbul-reports-html@1.1.44':
     dependencies:
       istanbul-lib-report: 3.0.1
       istanbul-reports: 3.2.0
 
-  '@containerbase/semantic-release-pnpm@1.3.33(semantic-release@25.0.3(typescript@6.0.2))':
+  '@containerbase/semantic-release-pnpm@1.3.34(semantic-release@25.0.3(typescript@6.0.2))':
     dependencies:
       '@semantic-release/error': 4.0.0
       aggregate-error: 5.0.0
@@ -8675,7 +8675,7 @@ snapshots:
 
   before-after-hook@4.0.0: {}
 
-  better-sqlite3@12.8.0:
+  better-sqlite3@12.9.0:
     dependencies:
       bindings: 1.5.0
       prebuild-install: 7.1.3
