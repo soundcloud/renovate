@@ -24,14 +24,14 @@ describe('modules/versioning/github-actions/index', () => {
   describe('.isVersion()', () => {
     it.each`
       version           | expected
-      ${'1'}            | ${false}
-      ${'1.2'}          | ${false}
+      ${'1'}            | ${true}
+      ${'1.2'}          | ${true}
       ${'1.2.3'}        | ${true}
       ${'~latest'}      | ${false}
       ${'1.2.3-alpha'}  | ${true}
       ${'1.2.3-rc.1'}   | ${true}
-      ${'v1'}           | ${false}
-      ${'v1.2'}         | ${false}
+      ${'v1'}           | ${true}
+      ${'v1.2'}         | ${true}
       ${'v1.2.3'}       | ${true}
       ${'v1.2.3-alpha'} | ${true}
       ${'v1.2.3-rc.1'}  | ${true}
@@ -60,7 +60,10 @@ describe('modules/versioning/github-actions/index', () => {
       ${'1.0.0'}          | ${true}
       ${'v1.0.0'}         | ${true}
       ${'v1.0.0-alpha'}   | ${false}
-      ${'1'}              | ${false}
+      ${'1.2'}            | ${true}
+      ${'v1.2'}           | ${true}
+      ${'1'}              | ${true}
+      ${'v1'}             | ${true}
       ${'not-a-version'}  | ${false}
     `('isStable("$version") === $expected', ({ version, expected }) => {
       expect(githubActions.isStable(version)).toBe(expected);
@@ -229,6 +232,9 @@ describe('modules/versioning/github-actions/index', () => {
       ${'v1.0.0'}  | ${'1.1'}     | ${true}
       ${'v2.0.0'}  | ${'1'}       | ${false}
       ${'2.0.0'}   | ${'v1'}      | ${false}
+      ${'v1.2'}    | ${'v1.3'}    | ${true}
+      ${'v1.3'}    | ${'v1.2'}    | ${false}
+      ${'v1.2'}    | ${'v1.2'}    | ${false}
     `(
       'isLessThanRange("$version", "$range") === $expected',
       ({ version, range, expected }) => {
@@ -251,6 +257,11 @@ describe('modules/versioning/github-actions/index', () => {
       ${'1.0.0'}   | ${'v1.0.0'}  | ${true}
       ${'v1.0.0'}  | ${'1.0.1'}   | ${false}
       ${'1.0.1'}   | ${'v1.0.0'}  | ${false}
+      ${'v1.2'}    | ${'v1.2'}    | ${true}
+      ${'v1.2'}    | ${'v1.3'}    | ${false}
+      ${'v1.2'}    | ${'1.2'}     | ${true}
+      ${'v1'}      | ${'v1'}      | ${true}
+      ${'v6'}      | ${'v5'}      | ${false}
     `(
       'equals("$version", "$other") === $expected',
       ({ version, other, expected }) => {
@@ -266,6 +277,8 @@ describe('modules/versioning/github-actions/index', () => {
       ${'2.3.4'}   | ${2}
       ${'v1.0.0'}  | ${1}
       ${'v2.3.4'}  | ${2}
+      ${'v1.2'}    | ${1}
+      ${'v1'}      | ${1}
       ${'invalid'} | ${null}
     `('getMajor("$version") === $expected', ({ version, expected }) => {
       expect(githubActions.getMajor(version)).toBe(expected);
@@ -279,6 +292,7 @@ describe('modules/versioning/github-actions/index', () => {
       ${'2.3.4'}   | ${3}
       ${'v1.0.0'}  | ${0}
       ${'v2.3.4'}  | ${3}
+      ${'v1.2'}    | ${2}
       ${'invalid'} | ${null}
     `('getMinor("$version") === $expected', ({ version, expected }) => {
       expect(githubActions.getMinor(version)).toBe(expected);
@@ -292,6 +306,7 @@ describe('modules/versioning/github-actions/index', () => {
       ${'2.3.4'}   | ${4}
       ${'v1.0.0'}  | ${0}
       ${'v2.3.4'}  | ${4}
+      ${'v1.2'}    | ${0}
       ${'invalid'} | ${null}
     `('getPatch("$version") === $expected', ({ version, expected }) => {
       expect(githubActions.getPatch(version)).toBe(expected);
@@ -315,6 +330,15 @@ describe('modules/versioning/github-actions/index', () => {
       ${'2.0.0'}   | ${'v1.0.0'}  | ${true}
       ${'v1.9.9'}  | ${'1.9.8'}   | ${true}
       ${'1.9.9'}   | ${'v1.9.8'}  | ${true}
+      ${'v1.3'}    | ${'v1.2'}    | ${true}
+      ${'v1.2'}    | ${'v1.3'}    | ${false}
+      ${'v1.3.0'}  | ${'v1.2'}    | ${true}
+      ${'v1.2'}    | ${'v1.2'}    | ${false}
+      ${'v1'}      | ${'v1.2'}    | ${false}
+      ${'v6'}      | ${'v5'}      | ${true}
+      ${'v5'}      | ${'v6'}      | ${false}
+      ${'v6.0.1'}  | ${'v6'}      | ${true}
+      ${'v6'}      | ${'v6.0.1'}  | ${false}
     `(
       'isGreaterThan("$version", "$other") === $expected',
       ({ version, other, expected }) => {
@@ -340,6 +364,13 @@ describe('modules/versioning/github-actions/index', () => {
       ${'1.0.0'}   | ${'v1.0.0'}  | ${0}
       ${'v1.0.0'}  | ${'1.0.1'}   | ${-1}
       ${'1.0.1'}   | ${'v1.0.0'}  | ${1}
+      ${'v1.3'}    | ${'v1.2'}    | ${1}
+      ${'v1.2'}    | ${'v1.3'}    | ${-1}
+      ${'v1.2'}    | ${'v1.2'}    | ${0}
+      ${'v1.3'}    | ${'v1.3.0'}  | ${0}
+      ${'v6'}      | ${'v5'}      | ${1}
+      ${'v5'}      | ${'v6'}      | ${-1}
+      ${'v6'}      | ${'v6.0.0'}  | ${0}
     `('sortVersions("$a", "$b") === $expected', ({ a, b, expected }) => {
       expect(githubActions.sortVersions(a, b)).toBe(expected);
     });
