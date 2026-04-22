@@ -508,7 +508,7 @@ describe('modules/versioning/github-actions/index', () => {
             currentVersion: 'v7.6.0',
             newVersion: 'v8.1.0',
             rangeStrategy: 'replace',
-            allVersions: [],
+            allVersions: new Set(),
           });
           // NOTE that this may not actually be valid, depending on whether the Action is using Immutable Tags, which requires full SemVer pinning
           expect(res).toEqual(expected);
@@ -540,10 +540,106 @@ describe('modules/versioning/github-actions/index', () => {
           currentVersion: 'v7.6.0',
           newVersion: 'v8.0.0',
           rangeStrategy: 'replace',
-          allVersions: ['v7.5.0', 'v7.6.0', ...availableVersions],
+          allVersions: new Set(['v7.5.0', 'v7.6.0', ...availableVersions]),
         });
         expect(res).toEqual(expected);
       });
+
+      it.each([
+        {
+          description:
+            'newVersion is full semver, no floating minor in allVersions',
+          newVersion: 'v7.6.0',
+          allVersions: ['v7.5.0', 'v7.6.0'],
+        },
+        {
+          description:
+            'newVersion is full semver, floating minor tag also in allVersions',
+          newVersion: 'v7.6.0',
+          allVersions: ['v7.5.0', 'v7.6', 'v7.6.0'],
+        },
+        {
+          description:
+            'newVersion is itself a floating minor (v7.6) — real-world case when floating tags sort equal to their full-semver counterpart',
+          newVersion: 'v7.6',
+          allVersions: [
+            'v7.5.0',
+            'v7.6',
+            'v7.6.0',
+            // only if the v7 tag exists
+            'v7',
+          ],
+        },
+        {
+          description:
+            'newVersion is floating minor with no full semver counterpart in allVersions',
+          newVersion: 'v7.6',
+          allVersions: [
+            'v7.5.0',
+            'v7.6',
+            // only if the v7 tag exists
+            'v7',
+          ],
+        },
+      ])(
+        'preserves floating major for non-major updates ($description)',
+        ({ newVersion, allVersions }) => {
+          // When the user has @v7, they want to track the major. A non-major update
+          // should NOT narrow them to @v7.6 — the floating major should be preserved.
+          const res = githubActions.getNewValue({
+            currentValue: 'v7',
+            currentVersion: 'v7.0.0',
+            newVersion,
+            rangeStrategy: 'replace',
+            allVersions: new Set(allVersions),
+          });
+          expect(res).toEqual('v7');
+        },
+      );
+
+      it('migrates from a floating major to a floating major.minor if the floating major no longer exists', () => {
+        const res = githubActions.getNewValue({
+          currentValue: 'v7',
+          currentVersion: 'v7.0.0',
+          newVersion: 'v7.6',
+          rangeStrategy: 'replace',
+          allVersions: new Set(['v7.5.0', 'v7.6', 'v7.6.0']),
+        });
+        expect(res).toEqual('v7.6');
+      });
+
+      it.each([
+        {
+          description: 'only full semver available',
+          allVersions: ['v7.5.0', 'v7.6.0'],
+          expected: 'v7.6.0',
+        },
+        {
+          description: 'floating minor tag available (v7.6)',
+          allVersions: ['v7.5.0', 'v7.6', 'v7.6.0'],
+          expected: 'v7.6',
+        },
+        {
+          description:
+            'floating major tag present but ignored (must not go less specific)',
+          allVersions: ['v7', 'v7.5.0', 'v7.6', 'v7.6.0'],
+          expected: 'v7.6',
+        },
+      ])(
+        'preserves floating minor for non-major updates ($description)',
+        ({ allVersions, expected }) => {
+          // When the user has @v7.5, Renovate should stay at the minor level.
+          // It must NOT return v7 (less specific), even if v7 appears in allVersions.
+          const res = githubActions.getNewValue({
+            currentValue: 'v7.5',
+            currentVersion: 'v7.5.0',
+            newVersion: 'v7.6.0',
+            rangeStrategy: 'replace',
+            allVersions: new Set(allVersions),
+          });
+          expect(res).toEqual(expected);
+        },
+      );
 
       it('when a release candidate version exists, that exact version is used', () => {
         const res = githubActions.getNewValue({
@@ -551,15 +647,36 @@ describe('modules/versioning/github-actions/index', () => {
           currentVersion: 'v7.6.0',
           newVersion: 'v8.0.0-rc3',
           rangeStrategy: 'replace',
-          allVersions: [
+          allVersions: new Set([
             'v7.5.0',
             'v7.6.0',
             'v8.0.0-rc1',
             'v8.0.0-rc2',
             'v8.0.0-rc3',
-          ],
+          ]),
         });
         expect(res).toEqual('v8.0.0-rc3');
+      });
+
+      it('returns newVersion when newVersion is a floating tag and allVersions is not set', () => {
+        const res = githubActions.getNewValue({
+          currentValue: 'v7',
+          currentVersion: 'v7.6.0',
+          newVersion: 'v8',
+          rangeStrategy: 'replace',
+        });
+        expect(res).toEqual('v8');
+      });
+
+      it('returns the floating newVersion when it exists in allVersions', () => {
+        const res = githubActions.getNewValue({
+          currentValue: 'v7',
+          currentVersion: 'v7.6.0',
+          newVersion: 'v8',
+          rangeStrategy: 'replace',
+          allVersions: new Set(['v7.6.0', 'v8']),
+        });
+        expect(res).toEqual('v8');
       });
 
       describe('if the newVersion is not found in allVersions', () => {
@@ -570,7 +687,7 @@ describe('modules/versioning/github-actions/index', () => {
             currentVersion: 'v7.6.0',
             newVersion: 'v8.5.0',
             rangeStrategy: 'replace',
-            allVersions: ['v7.5.0', 'v7.6.0'],
+            allVersions: new Set(['v7.5.0', 'v7.6.0']),
           });
           expect(res).toEqual('v8.5.0');
         });
@@ -581,7 +698,7 @@ describe('modules/versioning/github-actions/index', () => {
             currentVersion: 'v7.6.0',
             newVersion: 'v8.5.0',
             rangeStrategy: 'replace',
-            allVersions: ['v7.5.0', 'v7.6.0'],
+            allVersions: new Set(['v7.5.0', 'v7.6.0']),
           });
 
           expect(logger.logger.once.debug).toHaveBeenCalledWith(
@@ -591,7 +708,7 @@ describe('modules/versioning/github-actions/index', () => {
               currentVersion: 'v7.6.0',
               newVersion: 'v8.5.0',
               rangeStrategy: 'replace',
-              allVersions: ['v7.5.0', 'v7.6.0'],
+              allVersions: new Set(['v7.5.0', 'v7.6.0']),
             },
             'Suggested newValue `v8.5.0` was not included in allVersions, but it should have been. Returning it anyway',
           );

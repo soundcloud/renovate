@@ -1,4 +1,4 @@
-import { isEmptyArray, isUndefined } from '@sindresorhus/is';
+import { isUndefined } from '@sindresorhus/is';
 import type { SemVer } from 'semver';
 import semver from 'semver';
 import { logger } from '../../../logger/index.ts';
@@ -226,8 +226,25 @@ function getNewValue({
     return newVersion;
   }
 
+  // When a minor (i.e. `v1.2`), don't return a less-specific tag (i.e. `v1`), even if it's found in `allVersions`
+  const minLevel = isUndefined(range.minor) ? 'major' : 'minor';
+  const [prefix] = currentValue.split(massageValue(currentValue));
   const newParsed = parseVersion(newVersion);
   if (!newParsed) {
+    const newCoerced = parseVersionCoerced(newVersion);
+    if (newCoerced) {
+      // check that we're not returning a version that doesn't exist
+      // for instance, in the case `v5.5` is tagged, but there's no `v5` (or if it's been deleted)
+      const shortest = getShortestMatchingVersion(
+        prefix,
+        newCoerced,
+        allVersions ?? new Set(),
+        minLevel,
+      );
+      if (shortest) {
+        return shortest;
+      }
+    }
     return newVersion;
   }
 
@@ -238,9 +255,7 @@ function getNewValue({
     return newVersion;
   }
 
-  const [prefix] = currentValue.split(massageValue(currentValue));
-
-  if (isUndefined(allVersions) || isEmptyArray(allVersions)) {
+  if (isUndefined(allVersions) || allVersions.size === 0) {
     if (isUndefined(range.minor)) {
       return `${prefix}${newParsed.major}`;
     }
@@ -248,7 +263,17 @@ function getNewValue({
     return `${prefix}${newParsed.major}.${newParsed.minor}`;
   }
 
-  const shortest = getShortestMatchingVersion(prefix, newParsed, allVersions);
+  // If a major (i.e. `v7`), and the proposed update is a minor i.e. (`v7.6`), return the existing major version instead of updating to the new minor, as the major should have been re-tagged, too
+  if (isUndefined(range.minor) && newParsed.major === range.major) {
+    return `${prefix}${newParsed.major}`;
+  }
+
+  const shortest = getShortestMatchingVersion(
+    prefix,
+    newParsed,
+    allVersions,
+    minLevel,
+  );
   if (shortest) {
     return shortest;
   }
@@ -271,20 +296,33 @@ function getNewValue({
 function getShortestMatchingVersion(
   prefix: string,
   newParsed: SemVer,
-  allVersions: string[],
+  allVersions: Set<string>,
+  minLevel: 'major' | 'minor' = 'major',
 ): string | null {
-  // in shortest-first order
-  const options = [
-    `${prefix}${newParsed.major}`,
-    `${prefix}${newParsed.major}.${newParsed.minor}`,
-    `${prefix}${newParsed.major}.${newParsed.minor}.${newParsed.patch}`,
-    `${prefix}${newParsed.toString()}`,
-  ];
+  const { major, minor, patch } = newParsed;
+  const versions = new Set(allVersions);
 
-  for (const option of options) {
-    if (allVersions.includes(option)) {
-      return option;
+  // in shortest-first order: major, minor, patch, full
+  if (minLevel === 'major') {
+    const v = `${prefix}${major}`;
+    if (versions.has(v)) {
+      return v;
     }
+  }
+
+  const v = `${prefix}${major}.${minor}`;
+  if (versions.has(v)) {
+    return v;
+  }
+
+  const patchVersion = `${prefix}${major}.${minor}.${patch}`;
+  if (versions.has(patchVersion)) {
+    return patchVersion;
+  }
+
+  const fullVersion = `${prefix}${newParsed.toString()}`;
+  if (versions.has(fullVersion)) {
+    return fullVersion;
   }
 
   return null;
