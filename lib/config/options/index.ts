@@ -152,6 +152,7 @@ const options: Readonly<RenovateOptions>[] = [
     type: 'array',
     subType: 'string',
     parents: ['bumpVersions'],
+    supportsTemplating: true,
   },
   {
     name: 'name',
@@ -181,6 +182,7 @@ const options: Readonly<RenovateOptions>[] = [
     parents: ['postUpgradeTasks'],
     default: [],
     cli: false,
+    supportsTemplating: true,
   },
   {
     name: 'workingDirTemplate',
@@ -190,6 +192,7 @@ const options: Readonly<RenovateOptions>[] = [
     parents: ['postUpgradeTasks'],
     cli: false,
     env: false,
+    supportsTemplating: true,
   },
   {
     name: 'dataFileTemplate',
@@ -198,6 +201,7 @@ const options: Readonly<RenovateOptions>[] = [
     parents: ['postUpgradeTasks'],
     cli: false,
     env: false,
+    supportsTemplating: true,
   },
   {
     name: 'fileFilters',
@@ -670,7 +674,7 @@ const options: Readonly<RenovateOptions>[] = [
     description:
       'Change this value to override the default Renovate sidecar image.',
     type: 'string',
-    default: 'ghcr.io/renovatebot/base-image:13.45.15',
+    default: 'ghcr.io/renovatebot/base-image:13.45.19',
     globalOnly: true,
     deprecationMsg:
       'The usage of `binarySource=docker` is deprecated, and will be removed in the future',
@@ -817,6 +821,7 @@ const options: Readonly<RenovateOptions>[] = [
     type: 'string',
     default: '{{parentOrg}}/renovate-config',
     globalOnly: true,
+    supportsTemplating: true,
   },
   {
     name: 'inheritConfigFileName',
@@ -898,12 +903,14 @@ const options: Readonly<RenovateOptions>[] = [
     type: 'string',
     default:
       'This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.',
+    supportsTemplating: true,
   },
   {
     name: 'dependencyDashboardFooter',
     description:
       'Any text added here will be placed last in the Dependency Dashboard issue body, with a divider separator before it.',
     type: 'string',
+    supportsTemplating: true,
   },
   {
     name: 'dependencyDashboardLabels',
@@ -1236,6 +1243,7 @@ const options: Readonly<RenovateOptions>[] = [
     description:
       'Author to use for Git commits. Must conform to [RFC5322](https://datatracker.ietf.org/doc/html/rfc5322).',
     type: 'string',
+    supportsTemplating: true,
   },
   {
     name: 'gitPrivateKey',
@@ -1364,6 +1372,7 @@ const options: Readonly<RenovateOptions>[] = [
     parents: ['customDatasources'],
     cli: false,
     env: false,
+    supportsTemplating: true,
   },
   {
     name: 'registryUrls',
@@ -1598,6 +1607,7 @@ const options: Readonly<RenovateOptions>[] = [
     parents: ['packageRules'],
     cli: false,
     env: false,
+    supportsTemplating: true,
   },
   {
     name: 'sourceDirectory',
@@ -1607,6 +1617,7 @@ const options: Readonly<RenovateOptions>[] = [
     parents: ['packageRules'],
     cli: false,
     env: false,
+    supportsTemplating: true,
   },
   {
     name: 'matchSourceUrls',
@@ -1661,6 +1672,7 @@ const options: Readonly<RenovateOptions>[] = [
     parents: ['packageRules'],
     cli: false,
     env: false,
+    supportsTemplating: true,
   },
   {
     name: 'replacementVersion',
@@ -1681,6 +1693,7 @@ const options: Readonly<RenovateOptions>[] = [
     parents: ['packageRules'],
     cli: false,
     env: false,
+    supportsTemplating: true,
   },
   {
     name: 'replacementApproach',
@@ -1764,6 +1777,7 @@ const options: Readonly<RenovateOptions>[] = [
     stage: 'package',
     cli: false,
     env: false,
+    supportsTemplating: true,
   },
   {
     name: 'changelogUrl',
@@ -1876,6 +1890,7 @@ const options: Readonly<RenovateOptions>[] = [
     stage: 'branch',
     type: 'string',
     default: `renovate/`,
+    supportsTemplating: true,
   },
   {
     name: 'branchPrefixOld',
@@ -2012,12 +2027,14 @@ const options: Readonly<RenovateOptions>[] = [
     description: 'Commit type to use if Semantic Commits is enabled.',
     type: 'string',
     default: 'chore',
+    supportsTemplating: true,
   },
   {
     name: 'semanticCommitScope',
     description: 'Commit scope to use if Semantic Commits are enabled.',
     type: 'string',
     default: 'deps',
+    supportsTemplating: true,
   },
   {
     name: 'commitMessageLowerCase',
@@ -2222,6 +2239,7 @@ const options: Readonly<RenovateOptions>[] = [
     cli: false,
     env: false,
     advancedUse: true,
+    supportsTemplating: true,
   },
   {
     name: 'overridePackageName',
@@ -2232,6 +2250,7 @@ const options: Readonly<RenovateOptions>[] = [
     cli: false,
     env: false,
     advancedUse: true,
+    supportsTemplating: true,
   },
   {
     name: 'bbAutoResolvePrTasks',
@@ -2362,6 +2381,7 @@ const options: Readonly<RenovateOptions>[] = [
     deprecationMsg:
       'We strongly recommended that you avoid configuring this field directly. Please edit `branchPrefix`, `additionalBranchPrefix`, or `branchTopic` instead.',
     cli: false,
+    supportsTemplating: true,
   },
   {
     name: 'additionalBranchPrefix',
@@ -2369,6 +2389,7 @@ const options: Readonly<RenovateOptions>[] = [
     type: 'string',
     default: '',
     cli: false,
+    supportsTemplating: true,
   },
   {
     name: 'branchTopic',
@@ -2377,6 +2398,7 @@ const options: Readonly<RenovateOptions>[] = [
     default:
       '{{{depNameSanitized}}}-{{{newMajor}}}{{#if separateMinorPatch}}{{#if isPatch}}.{{{newMinor}}}{{/if}}{{/if}}{{#if separateMultipleMinor}}{{#if isMinor}}.{{{newMinor}}}{{/if}}{{/if}}.x{{#if isLockfileUpdate}}-lockfile{{/if}}',
     cli: false,
+    supportsTemplating: true,
   },
   {
     name: 'commitMessage',
@@ -2387,6 +2409,7 @@ const options: Readonly<RenovateOptions>[] = [
     deprecationMsg:
       'We deprecated editing the `commitMessage` directly, and we recommend you stop using this config option. Instead use config options like `commitMessageAction`, `commitMessageExtra`, and so on, to create the commit message you want.',
     cli: false,
+    supportsTemplating: true,
   },
   {
     name: 'commitBody',
@@ -2394,6 +2417,7 @@ const options: Readonly<RenovateOptions>[] = [
       'Commit message body template. Will be appended to commit message, separated by two line returns.',
     type: 'string',
     cli: false,
+    supportsTemplating: true,
   },
   {
     name: 'commitBodyTable',
@@ -2409,6 +2433,7 @@ const options: Readonly<RenovateOptions>[] = [
     type: 'string',
     cli: false,
     advancedUse: true,
+    supportsTemplating: true,
   },
   {
     name: 'commitMessageAction',
@@ -2417,6 +2442,7 @@ const options: Readonly<RenovateOptions>[] = [
     default: 'Update',
     cli: false,
     advancedUse: true,
+    supportsTemplating: true,
   },
   {
     name: 'commitMessageTopic',
@@ -2426,6 +2452,7 @@ const options: Readonly<RenovateOptions>[] = [
     default: 'dependency {{depName}}',
     cli: false,
     advancedUse: true,
+    supportsTemplating: true,
   },
   {
     name: 'commitMessageExtra',
@@ -2436,6 +2463,7 @@ const options: Readonly<RenovateOptions>[] = [
       'to {{#if isPinDigest}}{{{newDigestShort}}}{{else}}{{#if isMajor}}{{prettyNewMajor}}{{else}}{{#if isSingleVersion}}{{prettyNewVersion}}{{else}}{{#if newValue}}{{{newValue}}}{{else}}{{{newDigestShort}}}{{/if}}{{/if}}{{/if}}{{/if}}',
     cli: false,
     advancedUse: true,
+    supportsTemplating: true,
   },
   {
     name: 'commitMessageSuffix',
@@ -2443,6 +2471,7 @@ const options: Readonly<RenovateOptions>[] = [
     type: 'string',
     cli: false,
     advancedUse: true,
+    supportsTemplating: true,
   },
   {
     name: 'prBodyTemplate',
@@ -2452,6 +2481,7 @@ const options: Readonly<RenovateOptions>[] = [
     default:
       '{{{header}}}{{{table}}}{{{warnings}}}{{{notes}}}{{{changelogs}}}{{{configDescription}}}{{{controls}}}{{{footer}}}',
     cli: false,
+    supportsTemplating: true,
   },
   {
     name: 'prTitle',
@@ -2462,6 +2492,7 @@ const options: Readonly<RenovateOptions>[] = [
     deprecationMsg:
       'Direct editing of `prTitle` is now deprecated. Instead use config options like `commitMessageAction`, `commitMessageExtra`, and so on, as they will be passed through to `prTitle`.',
     cli: false,
+    supportsTemplating: true,
   },
   {
     name: 'prTitleStrict',
@@ -2476,6 +2507,7 @@ const options: Readonly<RenovateOptions>[] = [
     name: 'prHeader',
     description: 'Text added here will be placed first in the PR body.',
     type: 'string',
+    supportsTemplating: true,
   },
   {
     name: 'prFooter',
@@ -2483,6 +2515,7 @@ const options: Readonly<RenovateOptions>[] = [
       'Text added here will be placed last in the PR body, with a divider separator before it.',
     type: 'string',
     default: `This PR has been generated by [Mend Renovate](https://github.com/renovatebot/renovate).`,
+    supportsTemplating: true,
   },
   {
     name: 'customizeDashboard',
@@ -2530,6 +2563,7 @@ const options: Readonly<RenovateOptions>[] = [
     description: 'Human understandable name for the dependency group.',
     type: 'string',
     default: null,
+    supportsTemplating: true,
   },
   {
     name: 'groupSlug',
@@ -2539,6 +2573,7 @@ const options: Readonly<RenovateOptions>[] = [
     default: null,
     cli: false,
     env: false,
+    supportsTemplating: true,
   },
   {
     name: 'group',
@@ -2559,6 +2594,7 @@ const options: Readonly<RenovateOptions>[] = [
     description: 'Labels to set in Pull Request.',
     type: 'array',
     subType: 'string',
+    supportsTemplating: true,
   },
   {
     name: 'addLabels',
@@ -2566,6 +2602,7 @@ const options: Readonly<RenovateOptions>[] = [
     type: 'array',
     subType: 'string',
     mergeable: true,
+    supportsTemplating: true,
   },
   {
     name: 'assignees',
@@ -3004,6 +3041,7 @@ const options: Readonly<RenovateOptions>[] = [
     default: [],
     allowString: true,
     mergeable: true,
+    supportsTemplating: true,
   },
   {
     name: 'suppressNotifications',
@@ -3114,6 +3152,7 @@ const options: Readonly<RenovateOptions>[] = [
     parents: ['customManagers'],
     cli: false,
     env: false,
+    supportsTemplating: true,
   },
   {
     name: 'packageNameTemplate',
@@ -3123,6 +3162,7 @@ const options: Readonly<RenovateOptions>[] = [
     parents: ['customManagers'],
     cli: false,
     env: false,
+    supportsTemplating: true,
   },
   {
     name: 'datasourceTemplate',
@@ -3132,6 +3172,7 @@ const options: Readonly<RenovateOptions>[] = [
     parents: ['customManagers'],
     cli: false,
     env: false,
+    supportsTemplating: true,
   },
   {
     name: 'depTypeTemplate',
@@ -3141,6 +3182,7 @@ const options: Readonly<RenovateOptions>[] = [
     parents: ['customManagers'],
     cli: false,
     env: false,
+    supportsTemplating: true,
   },
   {
     name: 'currentValueTemplate',
@@ -3150,6 +3192,7 @@ const options: Readonly<RenovateOptions>[] = [
     parents: ['customManagers'],
     cli: false,
     env: false,
+    supportsTemplating: true,
   },
   {
     name: 'versioningTemplate',
@@ -3159,6 +3202,7 @@ const options: Readonly<RenovateOptions>[] = [
     parents: ['customManagers'],
     cli: false,
     env: false,
+    supportsTemplating: true,
   },
   {
     name: 'registryUrlTemplate',
@@ -3168,6 +3212,7 @@ const options: Readonly<RenovateOptions>[] = [
     parents: ['customManagers'],
     cli: false,
     env: false,
+    supportsTemplating: true,
   },
   {
     name: 'extractVersionTemplate',
@@ -3177,6 +3222,7 @@ const options: Readonly<RenovateOptions>[] = [
     parents: ['customManagers'],
     cli: false,
     env: false,
+    supportsTemplating: true,
   },
   {
     name: 'autoReplaceStringTemplate',
@@ -3186,6 +3232,7 @@ const options: Readonly<RenovateOptions>[] = [
     parents: ['customManagers'],
     cli: false,
     env: false,
+    supportsTemplating: true,
   },
   {
     name: 'fetchChangeLogs',
